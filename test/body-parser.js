@@ -93,7 +93,7 @@ describe('bodyParser()', function(){
   describe('with type option', function(){
     var server;
     before(function(){
-      server = createServer({ limit: '1mb', type: 'application/octet-stream' })
+      server = createServer({ limit: 1024 * 1024, type: 'application/octet-stream' })
     })
 
     it('should parse JSON', function(done){

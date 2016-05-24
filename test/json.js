@@ -7,7 +7,7 @@ var bodyParser = require('..');
 
 describe('bodyParser.json()', function(){
   it('should parse JSON', function(done){
-    var server = createServer({ limit: '1mb' })
+    var server = createServer({ limit: 1024 * 1024 })
 
     request(server)
     .post('/')
@@ -17,7 +17,7 @@ describe('bodyParser.json()', function(){
   })
 
   it('should fail gracefully', function(done){
-    var server = createServer({ limit: '1mb' })
+    var server = createServer({ limit: 1024 * 1024 })
 
     request(server)
     .post('/')
@@ -145,7 +145,7 @@ describe('bodyParser.json()', function(){
   describe('with limit option', function(){
     it('should 413 when over limit with Content-Length', function(done){
       var buf = new Buffer(1024)
-      var server = createServer({ limit: '1kb' })
+      var server = createServer({ limit: 1024 })
 
       buf.fill('.')
 
@@ -159,7 +159,7 @@ describe('bodyParser.json()', function(){
 
     it('should 413 when over limit with chunked encoding', function(done){
       var buf = new Buffer(1024)
-      var server = createServer({ limit: '1kb' })
+      var server = createServer({ limit: 1024 })
 
       buf.fill('.')
 
@@ -186,7 +186,7 @@ describe('bodyParser.json()', function(){
 
     it('should not change when options altered', function(done){
       var buf = new Buffer(1024)
-      var options = { limit: '1kb' }
+      var options = { limit: 1024 }
       var server = createServer(options)
 
       buf.fill('.')
@@ -201,11 +201,11 @@ describe('bodyParser.json()', function(){
 
     it('should not hang response', function(done){
       var buf = new Buffer(1024 * 10)
-      var server = createServer({ limit: '1kb' })
+      var server = createServer({ limit: 1024 })
 
       buf.fill('.')
 
-      var server = createServer({ limit: '8kb' })
+      var server = createServer({ limit: 8 * 1024 })
       var test = request(server).post('/')
       test.set('Content-Type', 'application/json')
       test.write(buf)
@@ -434,7 +434,7 @@ describe('bodyParser.json()', function(){
   describe('encoding', function(){
     var server;
     before(function(){
-      server = createServer({ limit: '1kb' })
+      server = createServer({ limit: 1024 })
     })
 
     it('should parse without encoding', function(done){
